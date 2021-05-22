@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clon/login_page.dart';
 import 'package:instagram_clon/tab_page.dart';
 
 class RootPgae extends StatelessWidget {
@@ -6,6 +7,6 @@ class RootPgae extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TabPage();
+    return LoginPage();
   }
 }

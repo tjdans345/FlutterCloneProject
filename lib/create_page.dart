@@ -45,23 +45,38 @@ class _CreatePageState extends State<CreatePage> {
   }
 
   Widget _buildBody() {
-    return Column(
-      children: <Widget>[
-        Text("No Image"),
-        TextField(
-          decoration: InputDecoration(hintText: '내용을 입력하세요'),
-          controller: textEditingController,
-        )
-      ],
+    return SingleChildScrollView(
+      //화면이 넘어갈 때 스크롤 속성을 준다
+      child: Column(
+        children: <Widget>[
+          _image == null ? Text("No Image") : Image.file(_image),
+          TextField(
+            decoration: InputDecoration(hintText: '내용을 입력하세요'),
+            controller: textEditingController,
+          )
+        ],
+      ),
     );
   }
 
-  Widget _getImage() {
-    ImagePicker.picImage()
+  Future _getImage() async {
+    PickedFile image =
+        await ImagePicker().getImage(source: ImageSource.gallery);
 
+    setState(() {
+      _image = File(image.path);
+    });
 
-
-
-
+    // 2번째 주석도 사용가능
+    // final pickedFile =
+    //     await ImagePicker().getImage(source: ImageSource.gallery);
+    //
+    // setState(() {
+    //   if (pickedFile != null) {
+    //     _image = File(pickedFile.path);
+    //   } else {
+    //     print('No Image Selected');
+    //   }
+    // });
   }
 }
