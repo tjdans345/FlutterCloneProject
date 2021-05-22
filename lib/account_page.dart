@@ -4,7 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AccountPage extends StatefulWidget {
-  const AccountPage({Key key}) : super(key: key);
+  final FirebaseUser user;
+
+  const AccountPage(this.user);
 
   @override
   _AccountPageState createState() => _AccountPageState();
@@ -51,9 +53,7 @@ class _AccountPageState extends State<AccountPage> {
                     width: 80.0,
                     height: 80.0,
                     child: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTAxMDFfMTc4%2FMDAxNjA5NTAzMTc0MjY0.bAhBWm7nDc8l2yPgDCa2LYX3n0HBo2HLzg8FYbP0dTAg.'
-                          'nPNiQKBgJNdYHfQlsIVbmBV_s_Le8MWkd3izx_MMNS8g.JPEG.atm500%2F1609252568086.jpg&type=sc960_832'),
+                      backgroundImage: NetworkImage(widget.user.photoUrl),
                     ),
                   ),
                   Container(
