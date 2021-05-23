@@ -1,8 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clon/create_page.dart';
+import 'package:instagram_clon/detail_post_page.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({Key key}) : super(key: key);
+  final FirebaseUser user;
+
+  const SearchPage(this.user);
 
   @override
   _SearchPageState createState() => _SearchPageState();
@@ -19,8 +24,8 @@ class _SearchPageState extends State<SearchPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
         onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => CreatePage()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => CreatePage(widget.user)));
         },
         child: Icon(Icons.create),
       ),
@@ -28,24 +33,46 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _buildBody() {
-    return GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            childAspectRatio: 1.0,
-            mainAxisSpacing: 1.0,
-            crossAxisSpacing: 1.0),
-        itemCount: 5,
-        itemBuilder: (context, index) {
-          return _buildListItem(context, index);
-        });
+    return StreamBuilder(
+      stream: Firestore.instance.collection('post').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        var items =
+            snapshot.data.documents ?? []; // ??< null일 때 []로 초기화 하겠다라는 의미
+        return GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 1.0,
+                mainAxisSpacing: 1.0,
+                crossAxisSpacing: 1.0),
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              return _buildListItem(context, items[index]);
+            });
+      },
+    );
   }
 
-  Widget _buildListItem(BuildContext context, int index) {
-    return Image.network(
-      'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTAyMjNfMjE5%2FMDAxNjE0MDg3NDU0OTU4.v9Dr8rvhSJ7EAm8jNROn8UqP-Q2Uo2fa4exYeHRfnysg.dsSJs0iO1AFL8X-l8s2-ze1F8tQSpafTGv86F4012kYg.'
-      'PNG.bogoo89%2F05fb2a261b37360672bd362be59c932d6cd8426418cba4ced5403ecb0d128cf5542210bde4f3.'
-      'png&type=sc960_832',
-      fit: BoxFit.cover,
+  Widget _buildListItem(BuildContext context, document) {
+    //Type 생략가능
+    return Hero(
+      tag: document['photoUrl'],
+      child: Material(
+        child: InkWell(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return DetailPostPage(document);
+            }));
+          },
+          child: Image.network(
+            document['photoUrl'],
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
     );
   }
 }

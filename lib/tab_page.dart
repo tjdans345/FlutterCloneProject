@@ -22,7 +22,11 @@ class _TabPageState extends State<TabPage> {
   void initState() {
     super.initState();
     //생성자 다음 호출되는 부분
-    _pages = [HomePage(widget.user), SearchPage(), AccountPage(widget.user)];
+    _pages = [
+      HomePage(widget.user),
+      SearchPage(widget.user),
+      AccountPage(widget.user)
+    ];
   }
 
   @override

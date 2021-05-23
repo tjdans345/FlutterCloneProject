@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AccountPage extends StatefulWidget {
   final FirebaseUser user;
@@ -14,6 +15,24 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  int _postCount = 0;
+
+  //초기화 되는 부분
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Firestore.instance
+        .collection('post')
+        .where('email', isEqualTo: widget.user.email)
+        .getDocuments() // getDocuments는 Futur임
+        .then((snapShot) {
+      setState(() {
+        _postCount = snapShot.documents.length;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +111,7 @@ class _AccountPageState extends State<AccountPage> {
             ],
           ),
           Text(
-            '0 \n 게시물',
+            '$_postCount\n 게시물',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 18.0),
           ),
