@@ -16,7 +16,7 @@ A few resources to get you started if this is your first Flutter project:
 - async와 await에 대해 궁금증이 해소되는 계기 ?
   (오늘 준호가 알려준 사이트에서 자바스크립트에서 비동기로 acync 키워드를 봤었는데 추 후 자바스크립트로 제대로 공부해볼 계획)
   
-  9월 정도 부터 코틀린으로 안드로이드 네이티브 개발 사이드프로젝트 계획 
+  9월 정도 부터 코틀린으로 안드로이드 네이티브 개발 사이드프로젝트 계획 (안드로이드 네이티브 개발은 조금 미루고 플러터 크래스 플랫폼을 활용한 플젝 먼저 진행으로 계획 변경)
 
 
 For help getting started with Flutter, view our
